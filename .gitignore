@@ -1,0 +1,18 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+.DS_Store
+.idea/
+bower_components/
+.grunt
+build/Release/
+node_modules/
+.lock-wscript
+
+# compiled files
+public/css/*
+public/js/*
