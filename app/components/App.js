@@ -2,11 +2,15 @@
  * Created by gen on 2016-10-30.
  */
 import React from 'react';
-import {RouteHandler} from 'react-router';
-
+import Navbar from './Navbar';
+import Footer from './Footer';
 class App extends React.Component{
     render(){
-        return (<div><RouteHandler/></div>);
+        return (<div>
+            <Navbar history = {this.props.history}/>
+            {this.props.children}
+            <Footer/>
+        </div>);
     }
 }
 
