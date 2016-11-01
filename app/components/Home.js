@@ -7,7 +7,10 @@ class Home extends React.Component {
     render() {
         return (
             <div className='alert alert-info'>
-                Hello from Home Component
+                <ul id="message"></ul>
+                <form>
+                    <input autocomplete="off"/><button>Send</button>
+                </form>
             </div>
         );
     }

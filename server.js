@@ -224,9 +224,10 @@ app.get('/api/characters/search', function(req, res, next) {
  * GET /api/characters/:id
  * Returns detailed character information.
  */
-app.get('/api/characters/:id', function(req, res, next) {
+app.get('/api/employees/:id', function(req, res, next) {
     var id = req.params.id;
 
+    /**
     Character.findOne({ characterId: id }, function(err, character) {
         if (err) return next(err);
 
@@ -235,7 +236,14 @@ app.get('/api/characters/:id', function(req, res, next) {
         }
 
         res.send(character);
-    });
+    });**/
+    var employee = {
+        id: req.params.id,
+        name: 'Zhangsan',
+        description: 'I am a hero',
+        icon: 'http://image.eveonline.com/Character/1_128.jpg'
+    };
+    res.send(employee);
 });
 
 /**
@@ -442,9 +450,9 @@ app.post('/api/report', function(req, res, next) {
 app.use(function(req, res) {
     Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
         if (err) {
-            res.status(500).send(err.message)
+            res.status(500).send(err.message);
         } else if (redirectLocation) {
-            res.status(302).redirect(redirectLocation.pathname + redirectLocation.search)
+            res.status(302).redirect(redirectLocation.pathname + redirectLocation.search);
         } else if (renderProps) {
             var html = ReactDOM.renderToString(React.createElement(Router.RoutingContext, renderProps));
             var page = swig.renderFile('views/index.html', { html: html });
@@ -464,21 +472,13 @@ app.use(function(err, req, res, next) {
 /**
  * Socket.io stuff.
  */
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var onlineUsers = 0;
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-io.sockets.on('connection', function(socket) {
-    onlineUsers++;
-
-    io.sockets.emit('onlineUsers', { onlineUsers: onlineUsers });
-
-    socket.on('disconnect', function() {
-        onlineUsers--;
-        io.sockets.emit('onlineUsers', { onlineUsers: onlineUsers });
-    });
+io.on('connection', function (socket) {
+    console.log('a user connected');
 });
 
-server.listen(app.get('port'), function() {
+http.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
