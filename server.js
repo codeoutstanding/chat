@@ -13,6 +13,7 @@ var logger = require('morgan');
 var async = require('async');
 var colors = require('colors');
 var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
 var request = require('request');
 var React = require('react');
 var ReactDOM = require('react-dom/server');
@@ -23,15 +24,20 @@ var _ = require('underscore');
 
 var config = require('./config');
 var routes = require('./app/routes');
-var Employee = require('./models/employee');
 
-var app = express();
-
+//create database connection and initialize plugin
 mongoose.connect(config.database);
+autoIncrement.initialize(mongoose.connection);
 mongoose.connection.on('error', function() {
     console.info('Error: Could not connect to MongoDB. Did you forget to run `mongod`?'.red);
 });
 
+//import models
+var Employee = require('./models/employee');
+var Group = require('./models/group');
+
+//start express
+var app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(compression());
 app.use(logger('dev'));
@@ -39,6 +45,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 /**
  * GET /api/characters
@@ -52,6 +59,18 @@ app.get('/api/employees', function(req, res, next) {
 
             if (employees.length > 0) {
                 return res.send(employees);
+            }
+        });
+});
+
+app.get('/api/groups', function(req, res, next) {
+    Group.find()
+        .limit(20)
+        .exec(function(err, groups) {
+            if (err) return next(err);
+
+            if (groups.length > 0) {
+                return res.send(groups);
             }
         });
 });
@@ -110,11 +129,52 @@ app.post('/api/employees', function(req, res, next) {
                 res.send({ message: employeeName + ' has been added successfully!' });
             });
         }catch (e){
-            res.status(404).send({ message: employeeName + ' is not a registered citizen of New Eden.' });
+            res.status(404).send({ message: employeeName + ' is not a registered employee of system.' });
         }
     }]);
 });
 
+
+/**
+ * POST /api/characters
+ * Adds new character to the database.
+ */
+app.post('/api/groups', function(req, res, next) {
+    var groupDescription = req.body.description;
+    var groupName = req.body.name;
+    var groupIcon = req.body.icon;
+
+    async.waterfall([function (callback) {
+        try {
+            Group.findOne({groupName: groupName}, function (error, group) {
+                if (error) return next(error);
+                if (group) {
+                    return res.status(409).send({
+                        message: group.groupName + ' is already in the database.'
+                    });
+                }
+                callback(error, groupName);
+            });
+        }catch (e){
+            return res.status(500).send({ message: 'internal server error' });
+        }
+    }, function (groupName) {
+        try{
+            var group = new Group({
+                groupName: groupName,
+                groupDescription: groupDescription,
+                groupIcon: groupIcon
+            });
+
+            group.save(function(err) {
+                if (err) return next(err);
+                res.send({ message: groupName + ' has been added successfully!' });
+            });
+        }catch (e){
+            res.status(404).send({ message: groupName + ' is not a registered group of system.' });
+        }
+    }]);
+});
 
 app.use(function(req, res) {
     Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {

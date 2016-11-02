@@ -26,7 +26,6 @@ class Employee extends React.Component{
 
     componentWillUnmount(){
         EmployeeStore.unlisten(this.onChange);
-        $(document.body).removeClass()
     }
 
     componentDidUpdate(prevProps){
@@ -38,9 +37,13 @@ class Employee extends React.Component{
     render() {
         return (
             <div className='container'>
-                <div className="profile-info clearfix">
-                    <h2><strong>{this.state.name}</strong></h2>
-                    <h4 className="lead">Description: {this.state.description}</h4>
+                <div className="panel panel-default">
+                    <div className="panel-heading">
+                       {this.state.employeeName}
+                    </div>
+                    <div className="panel-body">
+                        {this.state.employeeDescription}
+                    </div>
                 </div>
             </div>
         );

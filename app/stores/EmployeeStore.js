@@ -10,14 +10,15 @@ class EmployeeStore{
 
     constructor(){
         this.bindActions(EmployeeActions);
-        this.name = '';
-        this.description = '';
-        this.id = 0;
-        this.icon = '';
+        this.employeeName = '';
+        this.employeeDescription = '';
+        this.employeeId = 0;
+        this.employeeIcon = '';
     }
 
     onGetEmployeeSuccess(data){
         assign(this, data);
+        console.log(data);
 
     }
 

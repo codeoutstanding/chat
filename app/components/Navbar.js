@@ -21,7 +21,7 @@ class Navbar extends React.Component{
         return (<nav className="navbar navbar-default navbar-static-top">
             <ul className="nav navbar-nav">
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/group">Group</Link></li>
+                <li><Link to="/groups">Group</Link></li>
                 <li><Link to="/employees">Employee</Link></li>
                 <li><Link to='/addEmployee'>AddEmployee</Link></li>
                 <li><Link to='/addGroup'>AddGroup</Link></li>

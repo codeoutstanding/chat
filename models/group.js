@@ -4,15 +4,15 @@
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 
-var employeeSchema = new mongoose.Schema({
-    employeeName: String,
-    employeeDescription: String,
-    employeeIcon: String
+var groupSchema = new mongoose.Schema({
+    groupName: String,
+    groupDescription: String,
+    groupIcon: String
 });
 
 //employeeSchema.plugin(autoIncrement.plugin, 'Employee');
 //this will have an _id field added of type Number and will automatically increment with each new document
 //you can assign starting number and increment by number.
-employeeSchema.plugin(autoIncrement.plugin, { model: 'Employee', field: 'employeeId'});
+groupSchema.plugin(autoIncrement.plugin, { model: 'Group', field: 'groupId'});
 
-module.exports = mongoose.model('Employee', employeeSchema);
+module.exports = mongoose.model('Group', groupSchema);

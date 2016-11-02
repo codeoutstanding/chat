@@ -16,3 +16,4 @@ node_modules/
 # compiled files
 public/css/*
 public/js/*
+/npm-debug.log
