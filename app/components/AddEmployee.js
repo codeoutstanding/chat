@@ -4,6 +4,8 @@
 import React from 'react';
 import AddEmployeeStore from  '../stores/AddEmployeeStore';
 import AddEmployeeActions from '../actions/AddEmployeeActions';
+import GroupListActions from '../actions/GroupListActions';
+import GroupListStore from '../stores/GroupListStore';
 /**
  * JSX can be used in if statements and for loops,
  * can be assigned to variables,
@@ -19,12 +21,21 @@ class AddEmployee extends React.Component{
 
     componentDidMount(){
         AddEmployeeStore.listen(this.onChange);
+        GroupListStore.listen(this.onChange);
+        GroupListActions.getGroups();
     }
 
     componentWillUnmount(){
         AddEmployeeStore.unlisten(this.onChange);
+        GroupListStore.unlisten(this.onChange);
     }
 
+    /**
+     * when state change, we change the component state. That will cause
+     * component render again.
+     * shouldComponentUpdate return true or false will impact the render.
+     * @param state
+     */
     onChange(state){
         this.setState(state);
     }
@@ -46,6 +57,12 @@ class AddEmployee extends React.Component{
     }
 
     render(){
+        var groups = GroupListStore.getState().groups;
+
+        let dropMenus = groups.map((group, index) => {
+            return (<li><a href="#">{group.groupName}</a></li>);
+        });
+
         return (<div className="container">
             <div className="row flipInX animated">
                 <div className="col-sm-8">
@@ -53,6 +70,17 @@ class AddEmployee extends React.Component{
                         <div className="panel-heading">Add Employee</div>
                         <div className="panel-body">
                             <form onSubmit={this.handleSubmit.bind(this)}>
+                                <div className="form-group">
+                                    <div className="dropdown">
+                                        <button className="btn btn-default dropdown-toggle" type="button" id="groupName"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Group Name <span className="caret"></span>
+                                        </button>
+                                        <ul className="dropdown-menu" aria-labelledby="groupName">
+                                            {dropMenus}
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div className={'form-group' + this.state.nameValidationState}>
                                     <label className="control-label">
                                         Employee Name
