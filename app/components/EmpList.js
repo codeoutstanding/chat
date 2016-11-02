@@ -5,40 +5,28 @@
 import React from 'react';
 import {Link} from 'react-router';
 import {isEqual} from 'underscore';
+import EmployeeListStore from '../stores/EmployeeListStore';
+import EmployeeListActions from '../actions/EmployeeListActions';
 
 class EmpList extends React.Component {
     constructor(props) {
         super(props);
-        this.employees = this.getEmployees();
-        console.log('employee: init employee');
+        this.state = EmployeeListStore.getState();
         this.onChange = this.onChange.bind(this);
     }
 
-    getEmployees(){
-       var employees = [];
-       for(var i=0 ; i< 9; i++){
-           var employee = {
-                id: i,
-                name:"Zhangsan",
-                description:"I am a recruiter",
-                icon:"http://localhost:8080"
-           };
-           employees.push(employee);
-       }
-       return employees;
-    }
-
     componentDidMount() {
-
+        EmployeeListStore.listen(this.onChange);
+        EmployeeListActions.getEmployees();
     }
 
     componentWillUnmount() {
-
+        EmployeeListStore.unlisten(this.onChange);
     }
 
     componentDidUpdate(prevProps) {
         if (!isEqual(prevProps.params, this.props.params)) {
-
+            EmployeeListActions.getEmployees();
         }
     }
 
@@ -47,33 +35,30 @@ class EmpList extends React.Component {
     }
 
     render() {
-        var empList = [];
-        console.log('employee:'+this.employees.length);
-        for(var index=0; index<this.employees.length; index++){
-            var employee = this.employees[index];
-            empList.push(<div key={employee.id} className='list-group-item animated fadeIn'>
+        let emplist = this.state.employees.map((employee, index)=>{
+            return (<div key={employee.id} className='list-group-item animated fadeIn'>
                 <div className='media'>
                     <span className='position pull-left'>{index + 1}</span>
                     <div className='pull-left thumb-lg'>
-                        <Link to={'/employees/' + employee.id}>
+                        <Link to={'/employees/' + employee.employeeId}>
                             <img className='media-object'
                                  src={'http://image.eveonline.com/Character/1_128.jpg'}/>
                         </Link>
                     </div>
                     <div className='media-body'>
                         <h4 className='media-heading'>
-                            <Link to={'/employees/' + employee.id}>{employee.name}</Link>
+                            <Link to={'/employees/' + employee.employeeId}>{employee.employeeName}</Link>
                         </h4>
-                        <small>description: <strong>{employee.description}</strong></small>
+                        <small>description: <strong>{employee.employeeDescription}</strong></small>
                         <br />
                     </div>
                 </div>
             </div>);
-        }
+        });
 
         return (<div className="container">
             <div className="list-group">
-                {empList}
+                {emplist}
             </div>
         </div>);
     }
