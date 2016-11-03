@@ -195,6 +195,7 @@ app.post('/api/signIn', function (req, res, next) {
     });
 });
 
+
 app.use(function(req, res) {
     Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
         if (err) {
@@ -222,22 +223,63 @@ app.use(function(err, req, res, next) {
  */
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var users = [];
+var rooms = [];
 
 
 io.on('connection', function (socket) {
     console.log('a user connected');
+
     socket.on('disconnect', function(){
         console.log('user disconnected');
+        deleteRoom(socket);
     });
-    socket.on('user', function (user) {
-        if(_.contains(users, user)){
 
-        }else{
-            users.push(user);
-        }
+    socket.on('user-message', function (message) {
+        //sign in user
+        console.log('receive message:'+ message);
+        createRoomAndJoin(socket, message);
+    });
+
+    /**
+     * when client set up chat
+     */
+    socket.on('client-message', function (message) {
+        console.log('receive client message:' + message);
+        dispatchRoom(socket, message);
     });
 });
+
+/**
+ * dispatch a room to the client
+ * @param client
+ */
+function dispatchRoom(socket, client){
+    if(rooms.length>0){
+        var room = rooms.pop();
+        socket.join(room);
+        socket.broadcast.emit('Hi I am '+client.name);
+    }
+}
+
+/**
+ * initial a room and join the user
+ * @param socket
+ * @para user
+ */
+function createRoomAndJoin(socket, user) {
+    socket.join(user._id);
+    rooms.push(user._id);
+}
+
+
+/**
+ * when user leave the room, delete the room
+ * @param socket
+ */
+function deleteRoom(socket) {
+    console.log(socket);
+}
+
 
 
 http.listen(app.get('port'), function() {

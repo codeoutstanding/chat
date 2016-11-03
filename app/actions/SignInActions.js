@@ -29,7 +29,7 @@ class SignInActions{
             url: '/api/signIn',
             data: {group: groupId, userName: userName}
         }).done((data) => {
-            this.actions.getSignInSuccess(data.message);
+            this.actions.getSignInSuccess(data);
         }).fail((jqxhr) => {
             this.actions.getSignInFail(jqxhr.responseJSON.message);
         });

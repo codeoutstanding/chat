@@ -20,7 +20,7 @@ class SignInStore{
         assign(this, data);
         console.log(data);
         this.socket = io();
-        this.socket.emit('user', data);
+        this.socket.emit('message', data);
         this.helpBlock = 'sign in success and initial socket success';
         this.nameValidationState = 'has-success';
     }
