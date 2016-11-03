@@ -13,6 +13,6 @@ var groupSchema = new mongoose.Schema({
 //employeeSchema.plugin(autoIncrement.plugin, 'Employee');
 //this will have an _id field added of type Number and will automatically increment with each new document
 //you can assign starting number and increment by number.
-groupSchema.plugin(autoIncrement.plugin, { model: 'Group', field: 'groupId'});
+groupSchema.plugin(autoIncrement.plugin, 'Group');
 
 module.exports = mongoose.model('Group', groupSchema);

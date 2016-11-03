@@ -51,7 +51,7 @@ class AddEmployee extends React.Component{
             AddEmployeeActions.invalidName();
             this.refs.nameTextField.focus();
         }else{
-            AddEmployeeActions.addEmployee(GroupListStore.getState().group.groupId, name, description, icon);
+            AddEmployeeActions.addEmployee(GroupListStore.getState().group._id, name, description, icon);
         }
     }
 
@@ -63,7 +63,7 @@ class AddEmployee extends React.Component{
         var groups = GroupListStore.getState().groups;
 
         let dropMenus = groups.map((group, index) => {
-            return (<li><a href="#" onClick={this.selectedGroup.bind(this, group)}>{group.groupName}</a></li>);
+            return (<li key={index}><a href="#" onClick={this.selectedGroup.bind(this, group)}>{group.groupName}</a></li>);
         });
 
         return (<div className="container">

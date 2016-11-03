@@ -23,7 +23,8 @@ var dependencies = ['alt', 'react', 'react-dom', 'react-router', 'underscore'];
 gulp.task('vendor', function () {
     return gulp.src(['bower_components/jquery/dist/jquery.js',
         'bower_components/bootstrap/dist/js/bootstrap.js',
-        'bower_components/toastr/toastr.js'])
+        'bower_components/toastr/toastr.js',
+        'bower_components/socket.io-client/socket.io.js'])
         .pipe(concat('vendor.js')).pipe(gulpif(production, uglify({ mangle: false})))
         .pipe(gulp.dest('public/js'));
 });

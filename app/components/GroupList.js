@@ -36,7 +36,8 @@ class EmpList extends React.Component {
 
     render() {
         let grouplist = this.state.groups.map((group, index)=>{
-            return (<div key={group.groupId} className='list-group-item animated fadeIn'>
+            console.log("group=> "+ JSON.stringify(group));
+            return (<div key={index} className='list-group-item animated fadeIn'>
                 <div className='media'>
                     <span className='position pull-left'>{index + 1}</span>
                     <div className='pull-left thumb-lg'>

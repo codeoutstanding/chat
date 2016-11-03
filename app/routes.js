@@ -11,6 +11,7 @@ import Employee from './components/Employee';
 import EmpList from './components/EmpList';
 import AddEmployee from './components/AddEmployee';
 import AddGroup from './components/AddGroup';
+import SignIn from './components/SignIn';
 
 export default (
     <Route component={App}>
@@ -20,6 +21,7 @@ export default (
         <Route path='/employees/:id' component= {Employee}/>
         <Route path='/groups/:id' component= {Group}/>
         <Route path='/addEmployee' components={AddEmployee}/>
-        <Route path='/addGroup' components={AddGroup}/>
+        <Route path='/addGroup' component={AddGroup}/>
+        <Route path='/signIn' component={SignIn}/>
     </Route>
 );

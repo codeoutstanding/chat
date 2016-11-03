@@ -179,6 +179,22 @@ app.post('/api/groups', function(req, res, next) {
     }]);
 });
 
+
+app.post('/api/signIn', function (req, res, next) {
+    var group = req.body.group;
+    var userName = req.body.userName;
+
+    Employee.findOne({employeeName: userName, 'group': group}).exec(function (err, employee) {
+        if (err) return next(err);
+
+        if (employee) {
+            res.send(employee);
+        }else{
+            return res.status(404).send({ message: 'Employee not found.' });
+        }
+    });
+});
+
 app.use(function(req, res) {
     Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
         if (err) {
@@ -206,10 +222,23 @@ app.use(function(err, req, res, next) {
  */
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var users = [];
+
 
 io.on('connection', function (socket) {
     console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+    socket.on('user', function (user) {
+        if(_.contains(users, user)){
+
+        }else{
+            users.push(user);
+        }
+    });
 });
+
 
 http.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));

@@ -36,20 +36,20 @@ class EmpList extends React.Component {
 
     render() {
         let emplist = this.state.employees.map((employee, index)=>{
-            return (<div key={employee.id} className='list-group-item animated fadeIn'>
+            return (<div key={employee._id} className='list-group-item animated fadeIn'>
                 <div className='media'>
                     <span className='position pull-left'>{index + 1}</span>
                     <div className='pull-left thumb-lg'>
-                        <Link to={'/employees/' + employee.employeeId}>
+                        <Link to={'/employees/' + employee._id}>
                             <img className='media-object'
                                  src={'http://image.eveonline.com/Character/1_128.jpg'}/>
                         </Link>
                     </div>
                     <div className='media-body'>
                         <h4 className='media-heading'>
-                            <Link to={'/employees/' + employee.employeeId}>{employee.employeeName}</Link>
+                            <Link to={'/employees/' + employee._id}>{employee.employeeName}</Link>
                         </h4>
-                        <h6>Company: {employee.group}</h6>
+                        <h6>Company: {employee.group.groupName}</h6>
                         <small>description: <strong>{employee.employeeDescription}</strong></small>
 
                         <br />

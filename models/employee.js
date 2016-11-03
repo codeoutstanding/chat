@@ -14,6 +14,6 @@ var employeeSchema = new mongoose.Schema({
 //employeeSchema.plugin(autoIncrement.plugin, 'Employee');
 //this will have an _id field added of type Number and will automatically increment with each new document
 //you can assign starting number and increment by number.
-employeeSchema.plugin(autoIncrement.plugin, { model: 'Employee', field: 'employeeId'});
+employeeSchema.plugin(autoIncrement.plugin, 'Employee');
 
 module.exports = mongoose.model('Employee', employeeSchema);
