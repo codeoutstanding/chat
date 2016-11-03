@@ -52,6 +52,12 @@ class SignIn extends React.Component {
             return (<li key={index}><a href="#" onClick={this.selectedGroup.bind(this, group)}>{group.groupName}</a></li>);
         });
 
+
+        var messages = this.state.messages;
+        let mesList = messages.map((message, index) => {
+            return (<li key={index}>{message}</li>);
+        });
+
         return (
             <div className="container">
                 <div className="row flipInX animated">
@@ -82,6 +88,16 @@ class SignIn extends React.Component {
                                     <br/>
                                     <button type="submit" className="btn btn-primary">Submit</button>
                                 </form>
+                            </div>
+                        </div>
+                        <div className="panel panel-default">
+                            <div className="panel-heading">
+                                {this.state.employeeName}
+                            </div>
+                            <div className="panel-body">
+                                <ul>
+                                    {mesList}
+                                </ul>
                             </div>
                         </div>
                     </div>

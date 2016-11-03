@@ -196,6 +196,11 @@ app.post('/api/signIn', function (req, res, next) {
 });
 
 
+app.get('/api/rooms', function (req, res, next) {
+    res.send(rooms);
+});
+
+
 app.use(function(req, res) {
     Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
         if (err) {

@@ -13,7 +13,8 @@ class SignInActions{
             'getSignInSuccess',
             'getSignInFail',
             'updateName',
-            'invalidName'
+            'invalidName',
+            'receivedMessage'
         );
     }
 
@@ -30,6 +31,11 @@ class SignInActions{
             data: {group: groupId, userName: userName}
         }).done((data) => {
             this.actions.getSignInSuccess(data);
+            this.socket = io();
+            this.socket.emit('user-message', data);
+            this.socket.on('user-message', function (data) {
+                this.actions.receivedMessage(data);
+            });
         }).fail((jqxhr) => {
             this.actions.getSignInFail(jqxhr.responseJSON.message);
         });

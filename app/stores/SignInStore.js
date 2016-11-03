@@ -14,13 +14,11 @@ class SignInStore{
         this.employeeDescription = '';
         this.employeeIcon = '';
         this.helpBlock = '';
+        this.messages = [];
     }
 
     onGetSignInSuccess(data){
         assign(this, data);
-        console.log(data);
-        this.socket = io();
-        this.socket.emit('message', data);
         this.helpBlock = 'sign in success and initial socket success';
         this.nameValidationState = 'has-success';
     }
@@ -28,6 +26,10 @@ class SignInStore{
     onGetSignInFail(data){
         toastr.error(data.responseJSON.message);
         this.nameValidationState = 'has-error';
+    }
+
+    onReceivedMessage(message){
+        this.messages.push(message);
     }
 
     onUpdateName(event){

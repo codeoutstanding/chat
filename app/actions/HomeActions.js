@@ -10,14 +10,22 @@ class HomeActions{
      */
     constructor(){
         this.generateActions(
-            'doSendMessage',
+            'receivedMessage',
             'updateMessage',
-            'invalidMessage'
+            'invalidMessage',
+            'getRoomsSuccess',
+            'selectedRoom',
+            'getRoomsFail'
         );
     }
 
-    buildUpSession(){
+    getRooms(){
+        $.ajax({url: '/api/rooms/'}).done((data) => {
+            this.actions.getRoomsSuccess(data);
+        }).fail((jqXhr) => {
+            this.actions.getRoomsFail(jqXhr);
 
+        });
     }
 
 }

@@ -16,7 +16,7 @@ class Home extends React.Component {
 
     componentDidMount(){
         HomeStore.listen(this.onChange);
-        //build up a socket io
+        HomeActions.getRooms();
     }
 
     componentWillUnmount(){
@@ -42,10 +42,27 @@ class Home extends React.Component {
             this.refs.messageTextField.focus();
         }else{
             //socket io send message
+            this.state.socket.emit('client-message',  message);
         }
     }
 
+    selectedRoom(room){
+        console.log('view selected:'+ room);
+        HomeActions.selectedRoom(room);
+    }
+
     render() {
+        var rooms = this.state.chatRooms;
+
+        let dropMenus = rooms.map((room, index) => {
+            return (<li key={index}><a href="#" onClick={this.selectedRoom.bind(this, room)}>{room}</a></li>);
+        });
+
+        var messages = this.state.messages;
+        let mesList = messages.map((message, index) => {
+            return (<li key={index}>{message}</li>);
+        });
+
         return (
             <div className="container">
                 <div className="row">
@@ -57,7 +74,18 @@ class Home extends React.Component {
                             <div className="panel-body">
                                 <form onSubmit={this.handleSubmit.bind(this)}>
                                     <span className="help-block">{this.state.helpBlock}</span>
-                                    <div className={"form-group"+ this.state.messageInv}>
+                                    <div className="form-group">
+                                        <div className="dropdown">
+                                            <button className="btn btn-default dropdown-toggle" type="button" id="groupName"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                {this.state.room} <span className="caret"></span>
+                                            </button>
+                                            <ul className="dropdown-menu" aria-labelledby="groupName">
+                                                {dropMenus}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className={"form-group"+ this.state.messageValidationState}>
                                         <label className="control-label">
                                             Send Message
                                         </label>
@@ -67,6 +95,16 @@ class Home extends React.Component {
                                     <br/>
                                     <button type="submit" className="btn btn-primary">Submit</button>
                                 </form>
+                            </div>
+                        </div>
+                        <div className="panel panel-default">
+                            <div className="panel-heading">
+                                {this.state.employeeName}
+                            </div>
+                            <div className="panel-body">
+                                <ul>
+                                    {mesList}
+                                </ul>
                             </div>
                         </div>
                     </div>
