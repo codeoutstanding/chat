@@ -11,7 +11,8 @@ class GroupListActions{
     constructor(){
         this.generateActions(
             'getGroupsSuccess',
-            'getGroupsFail'
+            'getGroupsFail',
+            'selectedGroup'
         );
     }
 

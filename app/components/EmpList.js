@@ -49,7 +49,9 @@ class EmpList extends React.Component {
                         <h4 className='media-heading'>
                             <Link to={'/employees/' + employee.employeeId}>{employee.employeeName}</Link>
                         </h4>
+                        <h6>Company: {employee.group}</h6>
                         <small>description: <strong>{employee.employeeDescription}</strong></small>
+
                         <br />
                     </div>
                 </div>

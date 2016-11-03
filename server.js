@@ -53,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 app.get('/api/employees', function(req, res, next) {
     Employee.find()
+        .populate('group')
         .limit(20)
         .exec(function(err, employees) {
             if (err) return next(err);
@@ -98,6 +99,7 @@ app.get('/api/employees/:id', function(req, res, next) {
  * Adds new character to the database.
  */
 app.post('/api/employees', function(req, res, next) {
+    var groupId = req.body.groupId;
     var employeeDescription = req.body.description;
     var employeeName = req.body.name;
     var employeeIcon = req.body.icon;
@@ -119,6 +121,7 @@ app.post('/api/employees', function(req, res, next) {
     }, function (employeeName) {
         try{
             var employee = new Employee({
+                group: groupId,
                 employeeName: employeeName,
                 employeeDescription: employeeDescription,
                 employeeIcon: employeeIcon

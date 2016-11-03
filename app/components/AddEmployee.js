@@ -51,16 +51,19 @@ class AddEmployee extends React.Component{
             AddEmployeeActions.invalidName();
             this.refs.nameTextField.focus();
         }else{
-            AddEmployeeActions.addEmployee(name, description, icon);
+            AddEmployeeActions.addEmployee(GroupListStore.getState().group.groupId, name, description, icon);
         }
+    }
 
+    selectedGroup(group){
+        GroupListActions.selectedGroup(group);
     }
 
     render(){
         var groups = GroupListStore.getState().groups;
 
         let dropMenus = groups.map((group, index) => {
-            return (<li><a href="#">{group.groupName}</a></li>);
+            return (<li><a href="#" onClick={this.selectedGroup.bind(this, group)}>{group.groupName}</a></li>);
         });
 
         return (<div className="container">
@@ -74,7 +77,7 @@ class AddEmployee extends React.Component{
                                     <div className="dropdown">
                                         <button className="btn btn-default dropdown-toggle" type="button" id="groupName"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Group Name <span className="caret"></span>
+                                            {GroupListStore.getState().group.groupName} <span className="caret"></span>
                                         </button>
                                         <ul className="dropdown-menu" aria-labelledby="groupName">
                                             {dropMenus}

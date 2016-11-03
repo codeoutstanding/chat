@@ -18,15 +18,16 @@ class AddEmployeeActions{
 
     /**
      * add employee to db
+     * @param groupId
      * @param name
      * @param description
      * @param icon
      */
-    addEmployee(name, description, icon){
+    addEmployee(groupId, name, description, icon){
         $.ajax({
             type: 'POST',
             url: '/api/employees',
-            data: {name: name, description: description, icon: icon}
+            data: {groupId:groupId, name: name, description: description, icon: icon}
         }).done((data) => {
             this.actions.addEmployeeSuccess(data.message);
         }).fail((jqxhr) => {

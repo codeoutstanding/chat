@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 
 var employeeSchema = new mongoose.Schema({
+    group: { type: Number, ref: 'Group'},
     employeeName: String,
     employeeDescription: String,
     employeeIcon: String

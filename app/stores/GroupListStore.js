@@ -9,6 +9,7 @@ class GroupListStore{
     constructor(){
         this.bindActions(GroupListActions);
         this.groups = [];
+        this.group = {groupName: 'GroupName'};
     }
 
     onGetGroupsSuccess(data){
@@ -18,6 +19,11 @@ class GroupListStore{
 
     onGetGroupsFail(data){
         toastr.error(data.responseJSON.message);
+    }
+
+    onSelectedGroup(group){
+        console.log(group);
+        this.group = group;
     }
 
 }
