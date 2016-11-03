@@ -236,13 +236,11 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function(){
         console.log('user disconnected');
-        deleteRoom(socket);
     });
 
     socket.on('user-message', function (message) {
-        //sign in user
         console.log('receive message:'+ message);
-        createRoomAndJoin(socket, message);
+        io.emit('message', message);
     });
 
     /**
@@ -250,41 +248,9 @@ io.on('connection', function (socket) {
      */
     socket.on('client-message', function (message) {
         console.log('receive client message:' + message);
-        dispatchRoom(socket, message);
+        io.emit('message', message);
     });
 });
-
-/**
- * dispatch a room to the client
- * @param client
- */
-function dispatchRoom(socket, client){
-    if(rooms.length>0){
-        var room = rooms.pop();
-        socket.join(room);
-        socket.broadcast.emit('Hi I am '+client.name);
-    }
-}
-
-/**
- * initial a room and join the user
- * @param socket
- * @para user
- */
-function createRoomAndJoin(socket, user) {
-    socket.join(user._id);
-    rooms.push(user._id);
-}
-
-
-/**
- * when user leave the room, delete the room
- * @param socket
- */
-function deleteRoom(socket) {
-    console.log(socket);
-}
-
 
 
 http.listen(app.get('port'), function() {

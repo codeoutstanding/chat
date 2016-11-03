@@ -15,17 +15,31 @@ class SignInStore{
         this.employeeIcon = '';
         this.helpBlock = '';
         this.messages = [];
+        this.message = '';
     }
 
     onGetSignInSuccess(data){
         assign(this, data);
         this.helpBlock = 'sign in success and initial socket success';
         this.nameValidationState = 'has-success';
+        this.buildSession(data);
     }
 
     onGetSignInFail(data){
         toastr.error(data.responseJSON.message);
         this.nameValidationState = 'has-error';
+    }
+
+
+    onUpdateMessage(event){
+        this.message = event.target.value;
+        this.helpBlock = '';
+        this.messageValidationState = '';
+    }
+
+    onInvalidMessage(){
+        this.messageValidationState = 'has-error';
+        this.helpBlock = 'please enter a message';
     }
 
     onReceivedMessage(message){
@@ -41,6 +55,15 @@ class SignInStore{
     onInvalidName(){
         this.nameValidationState = 'has-error';
         this.helpBlock = 'please enter a employee name';
+    }
+
+    buildSession(user){
+        this.socket = io();
+        this.socket.emit('user-message', user.employeeName);
+        this.socket.on('message', function (data) {
+            console.log('sigin received message:'+data);
+            SignInActions.receivedMessage(data);
+        });
     }
 
 }

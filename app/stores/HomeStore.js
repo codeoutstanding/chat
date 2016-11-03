@@ -36,8 +36,8 @@ class HomeStore{
     buildUpSession(){
         this.socket = io();
         this.socket.emit('client-message', 'hello I am client');
-        this.socket.on('client-message', function (data) {
-            //this.actions.receivedMessage(data);
+        this.socket.on('message', function (data) {
+            HomeActions.receivedMessage(data);
         });
     }
 

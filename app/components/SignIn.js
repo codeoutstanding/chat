@@ -41,6 +41,19 @@ class SignIn extends React.Component {
         }
     }
 
+    handleMessageSubmit(event){
+        event.preventDefault();
+        var message = this.state.message.trim();
+
+        if(!message){
+            SignInActions.invalidMessage();
+            this.refs.messageTextField.focus();
+        }else{
+            //socket io send message
+            this.state.socket.emit('user-message',  message);
+        }
+    }
+
     selectedGroup(group){
         GroupListActions.selectedGroup(group);
     }
@@ -98,6 +111,19 @@ class SignIn extends React.Component {
                                 <ul>
                                     {mesList}
                                 </ul>
+                                <div>
+                                    <form onSubmit={this.handleMessageSubmit.bind(this)}>
+                                        <div className={"form-group"+ this.state.messageValidationState}>
+                                            <label className="control-label">
+                                                Send Message
+                                            </label>
+                                            <input type="text" className="form-control" ref="messageTextField"
+                                                   onChange={SignInActions.updateMessage} value={this.state.message}/>
+                                        </div>
+                                        <br/>
+                                        <button type="submit" className="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
