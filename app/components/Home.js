@@ -42,7 +42,8 @@ class Home extends React.Component {
             this.refs.messageTextField.focus();
         }else{
             //socket io send message
-            this.state.socket.emit('client-message',  message);
+            var sendMessage = {from: '111', 'to': this.state.room, message: message};
+            this.state.socket.emit('message', JSON.stringify(sendMessage));
         }
     }
 

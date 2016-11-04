@@ -36,9 +36,21 @@ class HomeStore{
     buildUpSession(){
         this.socket = io();
         this.socket.emit('client-message', 'hello I am client');
-        this.socket.on('message', function (data) {
-            HomeActions.receivedMessage(data);
+        this.socket.on('message', (data) => {
+            var data = JSON.parse(data);
+            console.log('======'+data.from + ' =='+data.to);
+            var message = this.filterMessage(data);
+            if(message){
+                HomeActions.receivedMessage(message);
+            }
         });
+    }
+
+    filterMessage(data){
+        if(data.from === this.room){
+            return data.message;
+        }
+        return null;
     }
 
     onGetRoomsFail(data){

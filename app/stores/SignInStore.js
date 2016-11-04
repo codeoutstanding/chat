@@ -16,6 +16,7 @@ class SignInStore{
         this.helpBlock = '';
         this.messages = [];
         this.message = '';
+        this.to = '';
     }
 
     onGetSignInSuccess(data){
@@ -60,12 +61,23 @@ class SignInStore{
     buildSession(user){
         this.socket = io();
         this.socket.emit('user-message', user.employeeName);
-        this.socket.on('message', function (data) {
-            console.log('sigin received message:'+data);
-            SignInActions.receivedMessage(data);
+        this.socket.on('message', (data) =>{
+            var data = JSON.parse(data);
+            console.log('======'+data.from + ' =='+data.to);
+            var message = this.filterMessage(data);
+            if(message){
+                this.to = data.from;
+                SignInActions.receivedMessage(message);
+            }
         });
     }
 
+    filterMessage(data){
+        if(data.to === this.employeeName){
+            return data.message;
+        }
+        return null;
+    }
 }
 
 export default alt.createStore(SignInStore);

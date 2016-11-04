@@ -229,24 +229,37 @@ app.use(function(err, req, res, next) {
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var rooms = [];
-
+var sockets = [];
 
 io.on('connection', function (socket) {
     console.log('a user connected');
 
     socket.on('disconnect', function(){
         console.log('user disconnected');
+        var index = -1;
+        for(var i=0;i<sockets.length;i++){
+            if(sockets[i] == socket){
+                index = i;
+                break;
+            }
+        }
+        console.log('remove room>'+index);
+        if(index > -1){
+            sockets.splice(index, 1);
+            rooms.splice(index, 1);
+        }
     });
 
     socket.on('user-message', function (message) {
-        console.log('receive message:'+ message);
-        io.emit('message', message);
+        console.log('user receive message:'+ message);
+        rooms.push(message);
+        sockets.push(socket);
     });
 
     /**
      * when client set up chat
      */
-    socket.on('client-message', function (message) {
+    socket.on('message', function (message) {
         console.log('receive client message:' + message);
         io.emit('message', message);
     });

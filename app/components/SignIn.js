@@ -50,7 +50,9 @@ class SignIn extends React.Component {
             this.refs.messageTextField.focus();
         }else{
             //socket io send message
-            this.state.socket.emit('user-message',  message);
+            var sendMessage = {from: this.state.employeeName,
+                'to': this.state.to, message: message};
+            this.state.socket.emit('message',  JSON.stringify(sendMessage));
         }
     }
 
